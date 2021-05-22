@@ -12,7 +12,7 @@ const createUser = async ({ name, email, password }) => {
 
 const getUserByEmail = (email) => userRepo.getUserByEmail(email);
 
-const getUsers = userRepo.getUsers();
+const getUsers = () => userRepo.getUsers();
 
 const updateUser = (email, changeSet) => userRepo.updateUser(email, changeSet);
 
