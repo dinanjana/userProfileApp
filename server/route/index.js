@@ -45,8 +45,8 @@ const controllers = [
     method: 'patch',
     secured: true,
     handler: (req, res) => {
-      updateUser(req.params.userId, req.body).then((user) => {
-        res.status(200).send(user);
+      updateUser(req.params.userId, req.body).then(() => {
+        res.sendStatus(204);
       });
     },
   },
