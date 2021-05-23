@@ -1,26 +1,32 @@
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Layout from "../src/components/Layout";
 import SummarySection from "../src/components/SummarySection";
 import { getUsers }from "../src/api";
 
-export default function Home({ users }) {
+export default function Home({ data }) {
+  const [users, setUsers] = useState(data);
+  const reloadUsers = () => {
+    getUsers().then(data => {
+      setUsers(data)
+    });
+  }
   return (
-    <Layout> <SummarySection users={users}/> </Layout>
+    <Layout reload={reloadUsers}> <SummarySection users={users}/> </Layout>
   )
 }
 
 export async function getStaticProps() {
-  const users = await getUsers();
+  const data = await getUsers();
   return {
     props: {
-      users
+      data
     },
     revalidate: 1
   };
 }
 
 Home.propTypes = {
-  users: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
 };

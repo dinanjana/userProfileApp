@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { controllers } = require('./route');
 const { authentication, authorization } = require('./service/AuthService');
 const { errorHandler } = require('./middleware/errorHandler');
@@ -8,6 +9,7 @@ const { initBDConnection } = require('./repository/Db');
 initBDConnection();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 

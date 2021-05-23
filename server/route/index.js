@@ -56,8 +56,11 @@ const controllers = [
     secured: false,
     handler: (req, res, next) => {
       getUserByEmail(req.body.email).then((users) => {
+        if (!users.length) {
+          throw new Error("User can't be found");
+        }
         const hash = loginUser(users[0], req.body.password);
-        res.cookie('auth', hash).status(204).send();
+        res.cookie('auth', hash).status(200).send({ auth: hash });
       }).catch((e) => {
         res.status(401);
         next(e);
