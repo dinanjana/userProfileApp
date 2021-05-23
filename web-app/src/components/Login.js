@@ -7,9 +7,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { login } from "../api"
+import { login, getUserById } from "../api"
 
-const Login = ({ open, setOpen }) => {
+const Login = ({ open, setOpen, setProfile }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [saving, setSaving] = useState(false);
@@ -28,11 +28,14 @@ const Login = ({ open, setOpen }) => {
       setSaving(true);
       login(email, password)
         .then((data) => {  
-          localStorage.setItem('auth', data.auth);
-          reset();
-          setSaving(false); 
-          setOpen(false)}
-        ).catch(e => {
+                localStorage.setItem('auth', data.auth);
+                reset();
+                setSaving(false); 
+                setOpen(false)
+                getUserById(email)
+                    .then(user => setProfile(user))
+            })
+        .catch(e => {
             reset();
             setSaving(false);
             setError(e.message);
@@ -87,6 +90,7 @@ const Login = ({ open, setOpen }) => {
 Login.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
+    setProfile: PropTypes.func.isRequired,
 }
 
 export default Login;

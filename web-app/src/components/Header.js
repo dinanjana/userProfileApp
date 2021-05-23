@@ -1,28 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { AppBar, Button, Toolbar, makeStyles } from "@material-ui/core";
+import { AppBar, Button, Toolbar } from "@material-ui/core";
 
-const styles = makeStyles(() => ({
-    root: {
-        right: 0
-    }
-}));
-
-const Header = ({ onLogin, onCreateProfile }) => {
-    const classes = styles();
+const Header = ({ openLogin, openCreateProfile, openEditProfile, isEdit }) => {
     return (<AppBar position="static">
         <Toolbar>
-            <div className={classes.root}>
-                <Button variant="outlined" onClick={onLogin}>Login</Button>
-                <Button variant="outlined" onClick={onCreateProfile}>Create an account</Button>
+            <div>
+                <Button variant="outlined" onClick={() => openLogin(true)}>Login</Button>
+                <Button variant="outlined" onClick={() => openCreateProfile(true)}>Create an account</Button>
+                {
+                    isEdit && <Button variant="outlined" onClick={() => openEditProfile(true)}>Edit your account</Button>
+                }
             </div>
         </Toolbar>
     </AppBar>)
 };
 
 Header.propTypes = {
-    onLogin: PropTypes.func.isRequired,
-    onCreateProfile: PropTypes.func.isRequired,
+    openLogin: PropTypes.func.isRequired,
+    openCreateProfile: PropTypes.func.isRequired,
+    openEditProfile: PropTypes.func.isRequired,
+    isEdit: PropTypes.bool.isRequired
 }
 
 export default Header;

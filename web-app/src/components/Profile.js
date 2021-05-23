@@ -10,11 +10,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createUser, updateUser } from "../api"
 
 const Profile = ({ open, setOpen, profile, reload }) => {
-  const isEdit = profile !== null && profile !== undefined;
-  const [name, setName] = useState(isEdit && profile.name || "");
-  const [email, setEmail] = useState(isEdit && profile.email || "");
-  const [password, setPassword] = useState(isEdit && profile.password || "");
-  const [profilePic, setProfilePic] = useState(isEdit && profile.profilePic || "");
+  const isEdit = !!profile;
+  const [name, setName] = useState((isEdit && profile.name)|| "");
+  const [email, setEmail] = useState((isEdit && profile.email) || "");
+  const [password, setPassword] = useState((isEdit && profile.password) || "");
+  const [profilePic, setProfilePic] = useState((isEdit && profile.profilePic) || "");
 
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -120,7 +120,7 @@ Profile.propTypes = {
          name: PropTypes.string,
          email: PropTypes.string,
          password: PropTypes.string,
-         profilePic: PropTypes.object }),
+         profilePic: PropTypes.string }),
     setOpen: PropTypes.func.isRequired,
     reload: PropTypes.func.isRequired     
 }

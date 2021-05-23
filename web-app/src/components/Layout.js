@@ -14,13 +14,21 @@ const styles = makeStyles(() => ({
 const Layout = ({ reload, children }) => {
     const [openLogin, setOpenLogin] = useState(false)
     const [openProfile, setOpenProfile] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [profile, setProfile] = useState(null);
+
     const classes = styles();
     return (
     <Paper className={classes.root}>
-        <Header onCreateProfile={setOpenProfile} onLogin={setOpenLogin}/>
+        <Header 
+            openCreateProfile={setOpenProfile} 
+            openLogin={setOpenLogin} 
+            openEditProfile={setOpenEdit} 
+            isEdit={!!profile}/>
         {children}
-        <Login open={openLogin} setOpen={setOpenLogin}/>
+        <Login open={openLogin} setOpen={setOpenLogin} setProfile={setProfile}/>
         <Profile open={openProfile} setOpen={setOpenProfile} reload={reload}/>
+        <Profile open={openEdit} profile={profile} setOpen={setOpenEdit} reload={reload}/>
     </Paper>);
 };
 

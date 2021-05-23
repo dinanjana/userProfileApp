@@ -22,18 +22,30 @@ export const updateUser = async (id, name, profilePic) =>
         {
             method: 'PATCH', 
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({ name, profilePic })
         }).catch(e => { throw e});
+
+export const getUserById = async (id) => 
+    fetch(`${API_URL}/users/${id}`, 
+        {
+            method: 'GET', 
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+        })
+        .then(res => res.json())
+        .catch(e => { throw e });
 
 export const login = async (email, password) => 
     fetch(`${API_URL}/login`, 
         {
-            method: 'POST', 
+            method: 'POST',
+            credentials: 'include', 
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email, password })
         }).then(res => {
             if (res.status === 401) {
                 throw new Error("Unauthorized username/password");
             }
-            res.json()
+            return res.json()
         }).catch(e => { console.error(e); throw e});

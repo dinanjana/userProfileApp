@@ -13,7 +13,7 @@ const ProfileSummary = ({ user }) => {
     return(
     <Card className={classes.root}>
         <CardHeader title={user.name}/>
-        <CardMedia image={user.profilePic}/>
+        {user.profilePic && <CardMedia image={user.profilePic}/>}
         <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
                 {user.email}
