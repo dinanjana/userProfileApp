@@ -11,6 +11,14 @@ Node js web server which provides user related data
 ## Web-app
 React js web application built on top of next js
 
+## Data layer
+Mongo DB for user data/ Images are stored in AWS S3
+
+## Deployment infra
+AWS EC2/ Docker
+
+### Note: Before running apps, make sure all the env variables are available 
+
 ### Tasks
 1. Visitor will see a list of user profiles (Full name, email, profile photo)
 2. Visitor can create a user profile by clicking the create profile button at the top
