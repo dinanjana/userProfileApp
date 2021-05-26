@@ -14,12 +14,18 @@ const Profile = ({ open, setOpen, profile, reload }) => {
   const [name, setName] = useState((isEdit && profile.name)|| "");
   const [email, setEmail] = useState((isEdit && profile.email) || "");
   const [password, setPassword] = useState((isEdit && profile.password) || "");
-  const [profilePic, setProfilePic] = useState((isEdit && profile.profilePic) || "");
+  const [profilePic, setProfilePic] = useState(null);
 
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const onChange = func => e => func(e.target.value);
+  const onChange = func => e => {
+      if (e.target.files) {
+        func(e.target.files[0]);
+        return;
+      }
+      func(e.target.value);
+  }
 
   const handleClose = () => setOpen(!open);
 
@@ -89,11 +95,10 @@ const Profile = ({ open, setOpen, profile, reload }) => {
           {isEdit && (
               <TextField 
               autoFocus
-              value={profilePic}
               margin="dense"
               id="profilePic"
               label="image"
-              type="image"
+              type="file"
               fullWidth
               onChange={onChange(setProfilePic)}
               disabled={saving}

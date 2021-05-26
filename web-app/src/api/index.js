@@ -17,14 +17,17 @@ export const createUser = async (name, email, password) =>
             }
         }).catch(e => { console.error(e); throw e; });
         
-export const updateUser = async (id, name, profilePic) => 
-    fetch(`${API_URL}/users/${id}`, 
+export const updateUser = async (id, name, profilePic) => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('profilePic', profilePic);
+    return fetch(`${API_URL}/users/${id}`, 
         {
             method: 'PATCH', 
-            headers: {'Content-Type': 'application/json'},
             credentials: 'include',
-            body: JSON.stringify({ name, profilePic })
-        }).catch(e => { throw e});
+            body: formData
+        }).catch(e => { throw e });
+}
 
 export const getUserById = async (id) => 
     fetch(`${API_URL}/users/${id}`, 

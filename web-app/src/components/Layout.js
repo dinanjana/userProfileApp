@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Paper, makeStyles } from "@material-ui/core";
+import Cookies from "js-cookie";
 import PropTypes from "prop-types";
 import Header from "./Header";
 import Profile from "./Profile";
 import Login from "./Login";
+import { getUserById } from "../api"
 
 const styles = makeStyles(() => ({
   root: {
@@ -17,6 +19,33 @@ const Layout = ({ reload, children }) => {
     const [openEdit, setOpenEdit] = useState(false);
     const [profile, setProfile] = useState(null);
 
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const loadUserData = async (email) =>  
+        getUserById(email).then(user => setProfile(user));
+
+    const logOut = () => {
+        Cookies.remove('auth');
+        Cookies.remove('email');
+        setProfile(null);
+        setLoggedIn(false);
+    }    
+
+    useEffect(() => {
+        const lastLoginState = !!Cookies.get('auth');
+        setLoggedIn(lastLoginState)
+        if (lastLoginState) {
+            loadUserData(Cookies.get('email'))
+                .catch(e => {
+                    console.error(e);
+                    setOpenLogin(true);
+                    setLoggedIn(false);
+                })
+        } else {
+            setOpenLogin(true);
+        }
+    }, [loggedIn]);
+
     const classes = styles();
     return (
     <Paper className={classes.root}>
@@ -24,11 +53,13 @@ const Layout = ({ reload, children }) => {
             openCreateProfile={setOpenProfile} 
             openLogin={setOpenLogin} 
             openEditProfile={setOpenEdit} 
-            isEdit={!!profile}/>
+            isEdit={!!profile}
+            loggedIn={loggedIn}
+            logOut={logOut}/>
         {children}
-        <Login open={openLogin} setOpen={setOpenLogin} setProfile={setProfile}/>
-        <Profile open={openProfile} setOpen={setOpenProfile} reload={reload}/>
-        <Profile open={openEdit} profile={profile} setOpen={setOpenEdit} reload={reload}/>
+        { openLogin && <Login open={openLogin} setOpen={setOpenLogin} setProfile={loadUserData} setLoggedIn={setLoggedIn}/>}
+        { openEdit && (<Profile key="edit" open={openEdit} profile={profile} setOpen={setOpenEdit} reload={reload}/>) }
+        { openProfile && (<Profile key="create" open={openProfile} setOpen={setOpenProfile} reload={reload}/>) }
     </Paper>);
 };
 
