@@ -5,7 +5,8 @@ const { getLoginInfo, setLoginInfo } = require('../repository/AuthRepository');
 const login = (user, pw) => {
   if (bcrypt.compareSync(pw, user.password)) {
     const hash = uuidv4();
-    setLoginInfo(hash, { email: user.email });
+    const expiry = Date.now() + process.env.EXPIRY * 1000;
+    setLoginInfo(hash, { email: user.email, expiry });
     return hash;
   }
   throw new Error('User name/password incorrect');
@@ -14,7 +15,7 @@ const login = (user, pw) => {
 // Check for authenticated user
 const authentication = (req, res, next) => {
   const user = getLoginInfo(req.cookies.auth);
-  if (user) {
+  if (user && user.expiry >= Date.now()) {
     req.email = user.email;
     return next();
   }

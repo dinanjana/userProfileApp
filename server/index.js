@@ -5,8 +5,10 @@ const { controllers } = require('./route');
 const { authentication, authorization } = require('./service/AuthService');
 const { errorHandler } = require('./middleware/errorHandler');
 const { initBDConnection } = require('./repository/Db');
+const { initS3Bucket } = require('./repository/AWS');
 
 initBDConnection();
+initS3Bucket();
 
 const app = express();
 app.use(cors({

@@ -1,7 +1,13 @@
+const multer = require('multer');
 const {
   loginUser, createUser, getUserByEmail, getUsers, updateUser,
 } = require('../service/UserService');
 
+const upload = multer();
+
+/**
+ * Route and handler map
+*/
 const controllers = [
   {
     route: '/users',
@@ -44,11 +50,12 @@ const controllers = [
     route: '/users/:userId',
     method: 'patch',
     secured: true,
-    handler: (req, res) => {
-      updateUser(req.params.userId, req.body).then(() => {
-        res.sendStatus(204);
-      });
-    },
+    handler: [upload.single('profilePic'), (req, res) => {
+      updateUser(req.params.userId, { ...req.body, profilePic: req.file })
+        .then(() => {
+          res.sendStatus(204);
+        });
+    }],
   },
   {
     route: '/login',
@@ -60,7 +67,7 @@ const controllers = [
           throw new Error("User can't be found");
         }
         const hash = loginUser(users[0], req.body.password);
-        res.cookie('auth', hash).status(200).send({ auth: hash });
+        res.cookie('auth', hash).cookie('email', req.body.email).status(200).send({ auth: hash });
       }).catch((e) => {
         res.status(401);
         next(e);
