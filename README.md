@@ -27,3 +27,6 @@ AWS EC2/ Docker
 5. Once profile is created user can login using email and password.
 6. Once logged in user can upload a profile photo and edit name. Email should not be editable.
 7. User should not be able to edit information of other user profiles.
+
+### Additional
+1. Cookie based authentication
